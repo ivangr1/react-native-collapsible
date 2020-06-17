@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, TouchableHighlight } from 'react-native';
+import { View, TouchableHighlight, FlatList } from 'react-native';
 import Collapsible from './Collapsible';
 import { ViewPropTypes } from './config';
 
@@ -98,9 +98,15 @@ export default class Accordion extends Component {
     );
 
     return (
-      <View style={containerStyle} {...viewProps}>
-        {sections.map((section, key) => (
-          <View key={key} style={sectionContainerStyle}>
+           <FlatList 
+      keyExtractor={item => item.id} 
+      style={containerStyle} 
+      data={sections} 
+      renderItem={({item, index}) => {
+        const section = item;
+        const key = index;
+      return (
+        <View key={index} style={sectionContainerStyle}>
             {renderSectionTitle(section, key, activeSections.includes(key))}
 
             {expandFromBottom && renderCollapsible(section, key)}
@@ -128,8 +134,8 @@ export default class Accordion extends Component {
                 sections
               )}
           </View>
-        ))}
-      </View>
+      )}}
+      {...viewProps} />
     );
   }
 }
